@@ -1,8 +1,6 @@
 #ifndef PACIENTES_H
 #define PACIENTES_H
 
-#include <string>
-
 using namespace std;
 
 // Declarar los prototipos de las funciones relacionadas con los pacientes
@@ -21,5 +19,7 @@ void leerPacientes();
 
 void crearArchivoPacientes();
 void borrarArchivoPacientes();
+
+void generarDatosPacientes();
 
 #endif

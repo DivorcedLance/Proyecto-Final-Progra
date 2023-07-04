@@ -12,27 +12,26 @@ class Vacuna {
 private:
   char ID[10];
   char nombre[50];
-  char marca[50];
+  char fabricante[50];
 
 public:
-  Vacuna(const char* _ID = "", const char* _nombre = "", const char* _marca = "") {
+  Vacuna(const char* _ID = "", const char* _nombre = "", const char* _fabricante = "") {
     strncpy(ID, _ID, 10);
     strncpy(nombre, _nombre, 50);
-    strncpy(marca, _marca, 50);
+    strncpy(fabricante, _fabricante, 50);
   }
 
   friend ostream& operator<<(ostream& os, const Vacuna& vac) {
-    os << "ID: " << vac.ID << endl;
-    os << "Nombre: " << vac.nombre << endl;
-    os << "Marca: " << vac.marca << endl;
+    os.write(vac.ID, 10);
+    os.write(vac.nombre, 50);
+    os.write(vac.fabricante, 50);
     return os;
   }
 
   friend istream& operator>>(istream& is, Vacuna& vac) {
-    is >> vac.ID;
-    is.ignore();
-    is.getline(vac.nombre, 50);
-    is.getline(vac.marca, 50);
+    is.read(vac.ID, 10);
+    is.read(vac.nombre, 50);
+    is.read(vac.fabricante, 50);
     return is;
   }
 
@@ -52,18 +51,18 @@ public:
     return nombre;
   }
 
-  void setMarca(const char* _marca) {
-    strncpy(marca, _marca, 50);
+  void setFabricante(const char* _fabricante) {
+    strncpy(fabricante, _fabricante, 50);
   }
 
-  const char* getMarca() const {
-    return marca;
+  const char* getFabricante() const {
+    return fabricante;
   }
 
   void imprimir() const {
     cout << "ID: " << ID << endl;
     cout << "Nombre: " << nombre << endl;
-    cout << "Marca: " << marca << endl;
+    cout << "Fabricante: " << fabricante << endl;
   }
 };
 
@@ -106,21 +105,23 @@ void crearVacuna()
   }
 
   char nombre[50];
-  char marca[50];
+  char fabricante[50];
 
   cout << "Ingrese el nombre de la vacuna: ";
   cin.getline(nombre, 50);
 
-  cout << "Ingrese la marca de la vacuna: ";
-  cin.getline(marca, 50);
+  cout << "Ingrese la fabricante de la vacuna: ";
+  cin.getline(fabricante, 50);
 
-  Vacuna vac(ID, nombre, marca);
+  Vacuna vac(ID, nombre, fabricante);
 
   ofstream archivo(VACUNAS_PATH.c_str(), ios::binary | ios::app);
   archivo << vac;
   archivo.close();
 
   cout << "Vacuna creada exitosamente." << endl;
+  vac.imprimir();
+  getch();
 }
 
 const char* mostrarVacunas()
@@ -136,7 +137,7 @@ const char* mostrarVacunas()
   cout << "Vacunas disponibles:" << endl;
   cout << "--------------------" << endl;
 
-  const int MAX_VACUNAS = 100;  // Máximo número de vacunas a manejar
+  const int MAX_VACUNAS = 200;
   Vacuna* vacunas[MAX_VACUNAS] = {nullptr};
 
   Vacuna vac;
@@ -145,13 +146,13 @@ const char* mostrarVacunas()
 
   while (archivo >> vac)
   {
-    vacunas[totalVacunas] = new Vacuna(vac);  // Crear una nueva instancia de la vacuna en el arreglo
+    vacunas[totalVacunas] = new Vacuna(vac);
     totalVacunas++;
 
     cout << "Opción " << contador << ":" << endl;
     cout << "ID: " << vac.getID() << endl;
     cout << "Nombre: " << vac.getNombre() << endl;
-    cout << "Marca: " << vac.getMarca() << endl;
+    cout << "Fabricante: " << vac.getFabricante() << endl;
     cout << "--------------------" << endl;
 
     contador++;
@@ -210,5 +211,26 @@ void borrarArchivoVacunas()
   else
   {
     cout << "No se pudo borrar el archivo vacunas.dat." << endl;
+  }
+}
+
+
+void generarDatosVacunas() {
+  ofstream archivo(VACUNAS_PATH.c_str(), ios::binary);
+  if (!archivo)
+  {
+    cout << "No se pudo crear el archivo vacunas.dat." << endl;
+    return;
+  }
+  
+  for (int i = 0; i < 8; i++) {
+    const char* ids[8] = {"001", "002", "003", "004", "005", "006", "007", "008"};
+    const char* nombres[8] = {"Pfizer-BioNTech", "Sinovac", "AstraZeneca", "Moderna", "Johnson & Johnson", "Covishield", "Sputnik V", "CanSino"};
+    const char* fabricantes[8] = {"Pfizer-BioNTech", "Sinovac Life Sciences", "AstraZeneca", "Moderna, Inc.", "Johnson & Johnson", "Serum Institute of India", "Gamaleya Research Institute", "CanSino Biologics"};
+
+    Vacuna pac(ids[i], nombres[i], fabricantes[i]);
+    ofstream archivo(VACUNAS_PATH.c_str(), ios::binary | ios::app);
+    archivo << pac;
+    archivo.close();
   }
 }

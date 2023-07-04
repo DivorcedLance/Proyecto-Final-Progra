@@ -75,16 +75,13 @@ void mostrarMenuPrincipal()
     cout << "1. Registrar nuevo paciente" << endl;
     cout << "2. Buscar paciente" << endl;
     cout << "3. Imprimir pacientes" << endl;
-    cout << "4. Registrar nuevo vacuna" << endl;
+    cout << "4. Registrar nueva vacuna" << endl;
     cout << "0. Salir" << endl;
     cout << endl;
     cout << "DEV MENU" << endl;
-    cout << "11. Crear archivo pacientes.bat" << endl;
-    cout << "12. Crear archivo vacuna.bat" << endl;
-    cout << "13. Crear archivo historialVacunacion.bat" << endl;
-    cout << "14. Borrar archivo pacientes.bat" << endl;
-    cout << "15. Borrar archivo vacuna.bat" << endl;
-    cout << "16. Borrar archivo historialVacunacion.bat" << endl;
+    cout << "11. Crear archivos" << endl;
+    cout << "12. Borrar archivos" << endl;
+    cout << "13. Generar datos" << endl;
 
     cout << "Ingrese una opción: ";
     cin >> opcionPrincipal;
@@ -122,26 +119,19 @@ void mostrarMenuPrincipal()
 
     case 11:
       crearArchivoPacientes();
-      break;
-
-    case 12:
       crearArchivoVacunas();
-      break;
-
-    case 13:
       crearArchivoHistorialVacunacion();
       break;
 
-    case 14:
+    case 12:
       borrarArchivoPacientes();
-      break;
-
-    case 15:
       borrarArchivoVacunas();
+      borrarArchivoHistorialVacunacion();
       break;
 
-    case 16:
-      borrarArchivoHistorialVacunacion();
+    case 13:
+      generarDatosPacientes();
+      generarDatosVacunas();
       break;
 
     case 0:
@@ -160,3 +150,4 @@ int main()
   mostrarMenuPrincipal();
   return 0;
 }
+

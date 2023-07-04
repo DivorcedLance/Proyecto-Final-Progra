@@ -8,7 +8,10 @@ bool vacunaExiste(const char * vacunaID);
 void crearVacuna();
 const char* mostrarVacunas();
 
+
 void crearArchivoVacunas();
 void borrarArchivoVacunas();
+
+void generarDatosVacunas();
 
 #endif

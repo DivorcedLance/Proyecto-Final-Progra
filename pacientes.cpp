@@ -9,8 +9,8 @@
 
 using namespace std;
 
-string TMP_PATH = "temp.dat";
 string PACIENTES_PATH = "pacientes.dat";
+string TMP_PATH = "temp.dat";
 
 class Paciente
 {
@@ -235,7 +235,7 @@ const char *crearPaciente()
 
   if (pacienteExiste(ID))
   {
-    cout << "El paciente con el ID " << ID << " ya existe." << endl;
+    cout << "El paciente con el ID: " << ID << " ya existe." << endl;
     getch();
     delete[] ID;
     return nullptr;
@@ -560,5 +560,34 @@ void borrarArchivoPacientes()
   else
   {
     cout << "No se pudo eliminar el archivo pacientes.dat." << endl;
+  }
+}
+
+
+
+void generarDatosPacientes() {
+  ofstream archivo(PACIENTES_PATH.c_str(), ios::binary);
+  if (!archivo)
+  {
+    cout << "No se pudo crear el archivo pacientes.dat." << endl;
+    return;
+  }
+    const char* id[15] = {"001", "002", "003", "004", "005", "006", "007", "008", "009", "010", "011", "012", "013", "014", "015"};
+  const char* nombres[15] = {"Juan", "María", "Carlos", "Ana", "Luis", "Carmen", "Jorge", "Rosa", "Pedro", "Laura", "José", "Silvia", "Marco", "Paola", "Ricardo"};
+  const char* apellidosPaterno[15] = {"García", "Torres", "Vargas", "Paredes", "Ramos", "Huamán", "Castro", "Soto", "Mendoza", "Castro", "Aguilar", "Gutiérrez", "Vidal", "Ríos", "Medina"};
+  const char* apellidosMaterno[15] = {"Rodríguez", "López", "Guzmán", "Díaz", "Chavez", "Sánchez", "Gómez", "Gonzales", "Alvarado", "Ruiz", "Valdez", "Torres", "Vargas", "Quispe", "Espinoza"};
+  const char* fechasNacimiento[15] = {"15/05/1985", "10/12/1990", "20/07/1978", "05/03/1965", "18/09/1980", "25/06/1995", "12/11/1972", "30/04/1993", "07/08/1988", "14/02/1977", "03/09/1996", "25/07/1982", "02/06/1970", "17/11/1991", "12/03/1987"};
+  const char* generos[15] = {"Masculino", "Femenino", "Masculino", "Femenino", "Masculino", "Femenino", "Masculino", "Femenino", "Masculino", "Femenino", "Masculino", "Femenino", "Masculino", "Femenino", "Masculino"};
+  const char* correos[15] = {"juan.garcia@example.com", "maria.torres@example.com", "carlos.vargas@example.com", "ana.paredes@example.com", "luis.ramos@example.com", "carmen.huaman@example.com", "jorge.castro@example.com", "rosa.soto@example.com", "pedro.mendoza@example.com", "laura.castro@example.com", "jose.aguilar@example.com", "silvia.gutierrez@example.com", "marco.vidal@example.com", "paola.rios@example.com", "ricardo.medina@example.com"};
+  const char* distritos[15] = {"Miraflores", "San Isidro", "La Victoria", "Surco", "Trujillo", "Cusco", "Los Olivos", "San Juan de Miraflores", "Callao", "San Borja", "Arequipa", "Piura", "Chiclayo", "Huancayo", "Iquitos"};
+  const char* provincias[15] = {"Lima", "Lima", "Lima", "Lima", "Trujillo", "Cusco", "Lima", "Lima", "Callao", "Lima", "Arequipa", "Piura", "Chiclayo", "Huancayo", "Maynas"};
+  const char* departamentos[15] = {"Lima", "Lima", "Lima", "Lima", "La Libertad", "Cusco", "Lima", "Lima", "Callao", "Lima", "Arequipa", "Piura", "Lambayeque", "Junín", "Loreto"};
+  const char* telefonos[15] = {"987654321", "912345678", "934567890", "945678901", "956789012", "967890123", "978901234", "989012345", "990123456", "901234567", "912345678", "923456789", "934567890", "945678901", "956789012"};
+
+  for (int i = 0; i < 15; i++) {
+    Paciente pac(id[i], nombres[i], apellidosPaterno[i], apellidosMaterno[i], fechasNacimiento[i], generos[i], correos[i], distritos[i], provincias[i], departamentos[i] , telefonos[i]);
+    ofstream archivo(PACIENTES_PATH.c_str(), ios::binary | ios::app);
+    archivo << pac;
+    archivo.close();
   }
 }
