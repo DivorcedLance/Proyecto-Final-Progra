@@ -1,6 +1,6 @@
-#include "pacientes.h"
-#include "vacunas.h"
-#include "historialVacunacion.h"
+#include "pacientes.h" // Funciones relacionadas con pacientes
+#include "vacunas.h" // Funciones relacionadas con vacunas
+#include "historialVacunacion.h" // Funciones relacionadas con el historial de vacunación
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -9,7 +9,7 @@
 
 using namespace std;
 
-// Función para mostrar el menú de paciente
+// Muestra el menú de paciente
 void mostrarMenuPaciente(const char *pacienteID)
 {
   int opcionPaciente;
@@ -33,28 +33,28 @@ void mostrarMenuPaciente(const char *pacienteID)
     switch (opcionPaciente)
     {
     case 1:
-      leerPaciente(pacienteID);
+      leerPaciente(pacienteID); // Muestra información del paciente
       break;
 
     case 2:
-      registrarVacunacion(pacienteID);
+      registrarVacunacion(pacienteID); // Registra una vacunación para el paciente
       break;
 
     case 3:
-      leerHistorialPaciente(pacienteID);
+      leerHistorialPaciente(pacienteID); // Muestra el historial de vacunación del paciente
       break;
 
     case 4:
-      actualizarPaciente(pacienteID);
+      actualizarPaciente(pacienteID); // Actualiza la información del paciente
       break;
 
     case 5:
-      eliminarPaciente(pacienteID);
-      return; // Salir de la función
+      eliminarPaciente(pacienteID); // Elimina al paciente
+      return; // Sale de la función y vuelve al menú principal
       break;
 
     case 0:
-      return; // Salir de la función
+      return; // Sale de la función y vuelve al menú principal
       break;
 
     default:
@@ -64,6 +64,7 @@ void mostrarMenuPaciente(const char *pacienteID)
   }
 }
 
+// Muestra el menú principal
 void mostrarMenuPrincipal()
 {
   int opcionPrincipal;
@@ -81,7 +82,6 @@ void mostrarMenuPrincipal()
     cout << "DEV MENU" << endl;
     cout << "11. Crear archivos" << endl;
     cout << "12. Borrar archivos" << endl;
-    cout << "13. Generar datos" << endl;
 
     cout << "Ingrese una opción: ";
     cin >> opcionPrincipal;
@@ -90,48 +90,43 @@ void mostrarMenuPrincipal()
     switch (opcionPrincipal)
     {
     case 1:
-      tempID = crearPaciente();
+      tempID = crearPaciente(); // Registra un nuevo paciente y devuelve el ID del paciente
       if (tempID != nullptr)
       {
-        strcpy(pacienteID, tempID);
-        delete[] tempID;
-        mostrarMenuPaciente(pacienteID);
+        strcpy(pacienteID, tempID); // Copia el ID del paciente a la variable pacienteID
+        delete[] tempID; // Libera la memoria asignada a tempID
+        mostrarMenuPaciente(pacienteID); // Muestra el menú de paciente con el ID del paciente como argumento
       }
       break;
 
     case 2:
-      tempID = buscarPaciente();
+      tempID = buscarPaciente(); // Busca un paciente existente y devuelve el ID del paciente
       if (tempID != nullptr)
       {
-        strcpy(pacienteID, tempID);
-        delete[] tempID;
-        mostrarMenuPaciente(pacienteID);
+        strcpy(pacienteID, tempID); // Copia el ID del paciente a la variable pacienteID
+        delete[] tempID; // Libera la memoria asignada a tempID
+        mostrarMenuPaciente(pacienteID); // Muestra el menú de paciente con el ID del paciente como argumento
       }
       break;
 
     case 3:
-      leerPacientes();
+      leerPacientes(); // Imprime la lista de pacientes
       break;
 
     case 4:
-      crearVacuna();
+      crearVacuna(); // Registra una nueva vacuna
       break;
 
     case 11:
-      crearArchivoPacientes();
-      crearArchivoVacunas();
-      crearArchivoHistorialVacunacion();
+      crearArchivoPacientes(); // Crea el archivo de pacientes
+      crearArchivoVacunas(); // Crea el archivo de vacunas
+      crearArchivoHistorialVacunacion(); // Crea el archivo de historial de vacunación
       break;
 
     case 12:
-      borrarArchivoPacientes();
-      borrarArchivoVacunas();
-      borrarArchivoHistorialVacunacion();
-      break;
-
-    case 13:
-      generarDatosPacientes();
-      generarDatosVacunas();
+      borrarArchivoPacientes(); // Borra el archivo de pacientes
+      borrarArchivoVacunas(); // Borra el archivo de vacunas
+      borrarArchivoHistorialVacunacion(); // Borra el archivo de historial de vacunación
       break;
 
     case 0:
@@ -147,7 +142,6 @@ void mostrarMenuPrincipal()
 
 int main()
 {
-  mostrarMenuPrincipal();
+  mostrarMenuPrincipal(); // Inicia el programa mostrando el menú principal
   return 0;
 }
-

@@ -20,6 +20,4 @@ void leerPacientes();
 void crearArchivoPacientes();
 void borrarArchivoPacientes();
 
-void generarDatosPacientes();
-
 #endif

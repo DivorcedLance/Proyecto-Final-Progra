@@ -66,6 +66,7 @@ public:
   }
 };
 
+// Verifica si una vacuna existe en el archivo de vacunas
 bool vacunaExiste(const char* vacunaID)
 {
   ifstream archivoLectura(VACUNAS_PATH.c_str(), ios::binary);
@@ -88,6 +89,7 @@ bool vacunaExiste(const char* vacunaID)
   return false;
 }
 
+// Crea una nueva vacuna y la guarda en el archivo de vacunas
 void crearVacuna()
 {
   system("cls");
@@ -124,6 +126,7 @@ void crearVacuna()
   getch();
 }
 
+// Muestra las vacunas disponibles y permite seleccionar una
 const char* mostrarVacunas()
 {
   system("cls");
@@ -177,7 +180,7 @@ const char* mostrarVacunas()
     return nullptr;
   }
 
-  const char* seleccionado = vacunas[opcion - 1]->getID();
+  const char* seleccionado = vacunas[opcion - 1]->getID(); // Obtiene el ID de la vacuna seleccionada
 
   // Liberar la memoria asignada para las instancias de vacuna
   for (int i = 0; i < totalVacunas; i++)
@@ -211,26 +214,5 @@ void borrarArchivoVacunas()
   else
   {
     cout << "No se pudo borrar el archivo vacunas.dat." << endl;
-  }
-}
-
-
-void generarDatosVacunas() {
-  ofstream archivo(VACUNAS_PATH.c_str(), ios::binary);
-  if (!archivo)
-  {
-    cout << "No se pudo crear el archivo vacunas.dat." << endl;
-    return;
-  }
-  
-  for (int i = 0; i < 8; i++) {
-    const char* ids[8] = {"001", "002", "003", "004", "005", "006", "007", "008"};
-    const char* nombres[8] = {"Pfizer-BioNTech", "Sinovac", "AstraZeneca", "Moderna", "Johnson & Johnson", "Covishield", "Sputnik V", "CanSino"};
-    const char* fabricantes[8] = {"Pfizer-BioNTech", "Sinovac Life Sciences", "AstraZeneca", "Moderna, Inc.", "Johnson & Johnson", "Serum Institute of India", "Gamaleya Research Institute", "CanSino Biologics"};
-
-    Vacuna pac(ids[i], nombres[i], fabricantes[i]);
-    ofstream archivo(VACUNAS_PATH.c_str(), ios::binary | ios::app);
-    archivo << pac;
-    archivo.close();
   }
 }
