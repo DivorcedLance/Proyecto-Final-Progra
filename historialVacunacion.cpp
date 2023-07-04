@@ -29,6 +29,7 @@ public:
     strncpy(FechaSiguienteVacuna, _FechaSiguienteVacuna, 20);
   }
 
+  // Sobrecarga del operador de inserción (<<) para imprimir objetos de la clase
   friend ostream &operator<<(ostream &os, const HistorialVacunacion &historial)
   {
     os.write(historial.ID, 10);
@@ -40,6 +41,7 @@ public:
     return os;
   }
 
+  // Sobrecarga del operador de extracción (>>) para leer objetos de la clase desde el flujo de entrada
   friend istream &operator>>(istream &is, HistorialVacunacion &historial)
   {
     is.read(historial.ID, 10);
@@ -51,7 +53,7 @@ public:
     return is;
   }
 
-
+  // Getters y Setters de la clase
   void setID(const char *_ID)
   {
     strncpy(ID, _ID, 10);
@@ -123,6 +125,7 @@ public:
   }
 };
 
+// Lee los historiales de vacunaciones desde un archivo
 void leerHistorialesVacunaciones()
 {
   system("cls");
@@ -145,6 +148,7 @@ void leerHistorialesVacunaciones()
   getch();
 }
 
+// Crea un nuevo historial de vacunación con el paciente y vacuna dados. Establece las fechas y dosis automáticamente. 
 void crearHistorialVacunacion(const char *pacienteID, const char *vacunaID)
 {
   system("cls");
@@ -221,6 +225,7 @@ void crearHistorialVacunacion(const char *pacienteID, const char *vacunaID)
   cout << "Historial de vacunación creado exitosamente." << endl;
 }
 
+// Función para leer el historial de vacunación de un paciente específico
 void leerHistorialVacunacionPaciente(const char *pacienteID)
 {
   system("cls");

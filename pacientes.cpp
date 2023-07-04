@@ -42,7 +42,7 @@ public:
     strncpy(departamento, _departamento, 50);
     strncpy(telefono, _telefono, 20);
   }
-
+  // Sobrecarga del operador de inserción (<<) para imprimir objetos de la clase
   friend ostream &operator<<(ostream &os, const Paciente &pac)
   {
     os.write(pac.ID, 10);
@@ -58,7 +58,7 @@ public:
     os.write(pac.telefono, 20);
     return os;
   }
-
+  // Sobrecarga del operador de extracción (>>) para leer objetos de la clase desde el flujo de entrada
   friend istream &operator>>(istream &is, Paciente &pac)
   {
     is.read(pac.ID, 10);
@@ -75,6 +75,7 @@ public:
     return is;
   }
 
+  // Getters y Setters de la clase
   void setID(const char *_ID)
   {
     strncpy(ID, _ID, 10);
