@@ -8,92 +8,113 @@ using namespace std;
 
 string VACUNAS_PATH = "vacunas.dat";
 
-class Vacuna
-{
+class Vacuna {
 private:
-  int ID;
+  char ID[10];
   char nombre[50];
-  char fabricante[50];
-  char fechaVencimiento[20];
-  int stock;
+  char marca[50];
 
 public:
-  Vacuna(int _ID = 0, const char *_nombre = "", const char *_fabricante = "", const char *_fechaVencimiento = "", int _stock = 0)
-  {
-    ID = _ID;
+  Vacuna(const char* _ID = "", const char* _nombre = "", const char* _marca = "") {
+    strncpy(ID, _ID, 10);
     strncpy(nombre, _nombre, 50);
-    strncpy(fabricante, _fabricante, 50);
-    strncpy(fechaVencimiento, _fechaVencimiento, 20);
-    stock = _stock;
+    strncpy(marca, _marca, 50);
   }
 
-  friend ostream &operator<<(ostream &os, const Vacuna &vac)
-  {
-    os.write(reinterpret_cast<const char *>(&vac.ID), sizeof(int));
-    os.write(vac.nombre, 50);
-    os.write(vac.fabricante, 50);
-    os.write(vac.fechaVencimiento, 20);
-    os.write(reinterpret_cast<const char *>(&vac.stock), sizeof(int));
+  friend ostream& operator<<(ostream& os, const Vacuna& vac) {
+    os << "ID: " << vac.ID << endl;
+    os << "Nombre: " << vac.nombre << endl;
+    os << "Marca: " << vac.marca << endl;
     return os;
   }
 
-  friend istream &operator>>(istream &is, Vacuna &vac)
-  {
-    is.read(reinterpret_cast<char *>(&vac.ID), sizeof(int));
-    is.read(vac.nombre, 50);
-    is.read(vac.fabricante, 50);
-    is.read(vac.fechaVencimiento, 20);
-    is.read(reinterpret_cast<char *>(&vac.stock), sizeof(int));
+  friend istream& operator>>(istream& is, Vacuna& vac) {
+    is >> vac.ID;
+    is.ignore();
+    is.getline(vac.nombre, 50);
+    is.getline(vac.marca, 50);
     return is;
   }
 
-  void imprimir() const
-  {
-    cout << "ID: " << ID << endl;
-    cout << "Nombre: " << nombre << endl;
-    cout << "Fabricante: " << fabricante << endl;
-    cout << "Fecha de vencimiento: " << fechaVencimiento << endl;
-    cout << "Stock: " << stock << endl;
+  void setID(const char* _ID) {
+    strncpy(ID, _ID, 10);
   }
 
-  int getID() const
-  {
+  const char* getID() const {
     return ID;
   }
 
-  const char *getNombre() const
-  {
+  void setNombre(const char* _nombre) {
+    strncpy(nombre, _nombre, 50);
+  }
+
+  const char* getNombre() const {
     return nombre;
   }
+
+  void setMarca(const char* _marca) {
+    strncpy(marca, _marca, 50);
+  }
+
+  const char* getMarca() const {
+    return marca;
+  }
+
+  void imprimir() const {
+    cout << "ID: " << ID << endl;
+    cout << "Nombre: " << nombre << endl;
+    cout << "Marca: " << marca << endl;
+  }
 };
+
+bool vacunaExiste(const char* vacunaID)
+{
+  ifstream archivoLectura(VACUNAS_PATH.c_str(), ios::binary);
+  if (!archivoLectura)
+  {
+    crearArchivoVacunas();
+  }
+
+  Vacuna vac;
+  while (archivoLectura >> vac)
+  {
+    if (strcmp(vac.getID(), vacunaID) == 0)
+    {
+      archivoLectura.close();
+      return true;
+    }
+  }
+
+  archivoLectura.close();
+  return false;
+}
 
 void crearVacuna()
 {
   system("cls");
 
-  int ID;
-  char nombre[50];
-  char fabricante[50];
-  char fechaVencimiento[20];
-  int stock;
-
-  cout << "Ingrese el ID de la Vacuna: ";
-  cin >> ID;
-
+  char ID[10];
   cin.ignore();
-  cout << "Ingrese el nombre: ";
+  cout << "Ingrese el ID de la Vacuna: ";
+  cin.getline(ID, 10);
+
+  if (vacunaExiste(ID))
+  {
+    cout << "La vacuna con el ID " << ID << " ya existe." << endl;
+    getch();
+    return;
+  }
+
+  char nombre[50];
+  char marca[50];
+
+  cout << "Ingrese el nombre de la vacuna: ";
   cin.getline(nombre, 50);
 
-  cout << "Ingrese el fabricante: ";
-  cin.getline(fabricante, 50);
+  cout << "Ingrese la marca de la vacuna: ";
+  cin.getline(marca, 50);
 
-  cout << "Ingrese la fecha de vencimiento: ";
-  cin.getline(fechaVencimiento, 20);
-
-  cout << "Ingrese el stock: ";
-  cin >> stock;
-
-  Vacuna vac(ID, nombre, fabricante, fechaVencimiento, stock);
+  Vacuna vac(ID, nombre, marca);
 
   ofstream archivo(VACUNAS_PATH.c_str(), ios::binary | ios::app);
   archivo << vac;
@@ -102,150 +123,71 @@ void crearVacuna()
   cout << "Vacuna creada exitosamente." << endl;
 }
 
-void leerVacuna()
+const char* mostrarVacunas()
 {
   system("cls");
 
   ifstream archivo(VACUNAS_PATH.c_str(), ios::binary);
   if (!archivo)
   {
-    cout << "No se pudo abrir el archivo." << endl;
-    return;
+    crearArchivoVacunas();
   }
 
+  cout << "Vacunas disponibles:" << endl;
+  cout << "--------------------" << endl;
+
+  const int MAX_VACUNAS = 100;  // Máximo número de vacunas a manejar
+  Vacuna* vacunas[MAX_VACUNAS] = {nullptr};
+
   Vacuna vac;
+  int contador = 1;
+  int totalVacunas = 0;
+
   while (archivo >> vac)
   {
-    vac.imprimir();
-    cout << endl;
+    vacunas[totalVacunas] = new Vacuna(vac);  // Crear una nueva instancia de la vacuna en el arreglo
+    totalVacunas++;
+
+    cout << "Opción " << contador << ":" << endl;
+    cout << "ID: " << vac.getID() << endl;
+    cout << "Nombre: " << vac.getNombre() << endl;
+    cout << "Marca: " << vac.getMarca() << endl;
+    cout << "--------------------" << endl;
+
+    contador++;
   }
 
   archivo.close();
-  getch();
+
+  if (totalVacunas == 0)
+  {
+    cout << "No hay vacunas disponibles." << endl;
+    getch();
+    return nullptr;
+  }
+
+  cout << "Seleccione una opción: ";
+  int opcion;
+  cin >> opcion;
+
+  if (opcion < 1 || opcion > totalVacunas)
+  {
+    cout << "Opción inválida." << endl;
+    return nullptr;
+  }
+
+  const char* seleccionado = vacunas[opcion - 1]->getID();
+
+  // Liberar la memoria asignada para las instancias de vacuna
+  for (int i = 0; i < totalVacunas; i++)
+  {
+    delete vacunas[i];
+  }
+
+  return seleccionado;
 }
 
-void actualizarVacuna()
-{
-  system("cls");
-
-  int ID;
-  char nombre[50];
-  char fabricante[50];
-  char fechaVencimiento[20];
-  int stock;
-
-  cout << "Ingrese el ID de la vacuna a actualizar: ";
-  cin >> ID;
-
-  cin.ignore();
-  cout << "Ingrese el nuevo nombre: ";
-  cin.getline(nombre, 50);
-
-  cout << "Ingrese el nuevo fabricante: ";
-  cin.getline(fabricante, 50);
-
-  cout << "Ingrese la nueva fecha de vencimiento: ";
-  cin.getline(fechaVencimiento, 20);
-
-  cout << "Ingrese el nuevo stock: ";
-  cin >> stock;
-
-  ifstream archivoLectura(VACUNAS_PATH.c_str(), ios::binary);
-  if (!archivoLectura)
-  {
-    cout << "No se pudo abrir el archivo." << endl;
-    return;
-  }
-
-  ofstream archivoEscritura("temp.dat", ios::binary);
-  if (!archivoEscritura)
-  {
-    cout << "No se pudo abrir el archivo." << endl;
-    return;
-  }
-
-  Vacuna vac;
-  bool encontrado = false;
-
-  while (archivoLectura >> vac)
-  {
-    if (vac.getID() == ID)
-    {
-      encontrado = true;
-      vac.imprimir();
-      vac = Vacuna(ID, nombre, fabricante, fechaVencimiento, stock);
-      cout << "Vacuna actualizada." << endl;
-    }
-    archivoEscritura << vac;
-  }
-
-  archivoLectura.close();
-  archivoEscritura.close();
-
-  if (!encontrado)
-  {
-    cout << "No se encontró la vacuna con el ID especificado." << endl;
-    return;
-  }
-
-  remove(VACUNAS_PATH.c_str());
-  rename("temp.dat", VACUNAS_PATH.c_str());
-}
-
-void eliminarVacuna()
-{
-  system("cls");
-
-  int ID;
-
-  cout << "Ingrese el ID de la vacuna a eliminar: ";
-  cin >> ID;
-
-  ifstream archivoLectura(VACUNAS_PATH.c_str(), ios::binary);
-  if (!archivoLectura)
-  {
-    cout << "No se pudo abrir el archivo." << endl;
-    return;
-  }
-
-  ofstream archivoEscritura("temp.dat", ios::binary);
-  if (!archivoEscritura)
-  {
-    cout << "No se pudo abrir el archivo." << endl;
-    return;
-  }
-
-  Vacuna vac;
-  bool encontrado = false;
-
-  while (archivoLectura >> vac)
-  {
-    if (vac.getID() == ID)
-    {
-      encontrado = true;
-      vac.imprimir();
-      cout << "Vacuna eliminada." << endl;
-    }
-    else
-    {
-      archivoEscritura << vac;
-    }
-  }
-
-  archivoLectura.close();
-  archivoEscritura.close();
-
-  if (!encontrado)
-  {
-    cout << "No se encontró la vacuna con el ID especificado." << endl;
-    return;
-  }
-
-  remove(VACUNAS_PATH.c_str());
-  rename("temp.dat", VACUNAS_PATH.c_str());
-}
-
-void crearArchivo()
+void crearArchivoVacunas()
 {
   ofstream archivo(VACUNAS_PATH.c_str(), ios::binary);
   if (!archivo)
@@ -259,7 +201,7 @@ void crearArchivo()
   cout << "Archivo vacunas.dat creado exitosamente." << endl;
 }
 
-void borrarArchivo()
+void borrarArchivoVacunas()
 {
   if (remove(VACUNAS_PATH.c_str()) == 0)
   {
@@ -268,57 +210,5 @@ void borrarArchivo()
   else
   {
     cout << "No se pudo borrar el archivo vacunas.dat." << endl;
-  }
-}
-
-void vacunasMenu()
-{
-  int opcion;
-
-  while (true)
-  {
-    system("cls");
-    cout << "MENU" << endl;
-    cout << "1. Crear vacuna" << endl;
-    cout << "2. Leer vacunas" << endl;
-    cout << "3. Actualizar vacuna" << endl;
-    cout << "4. Eliminar vacuna" << endl;
-    cout << "0. Salir" << endl;
-
-    cout << endl;
-    cout << "DEV MENU" << endl;
-    cout << "11. Crear Archivo vacunas.dat" << endl;
-    cout << "12. Borrar Archivo vacunas.dat" << endl;
-
-    cout << endl;
-    cout << "Seleccione una opcion: ";
-    cin >> opcion;
-
-    switch (opcion)
-    {
-    case 1:
-      crearVacuna();
-      break;
-    case 2:
-      leerVacuna();
-      break;
-    case 3:
-      actualizarVacuna();
-      break;
-    case 4:
-      eliminarVacuna();
-      break;
-    case 11:
-      crearArchivo();
-      break;
-    case 12:
-      borrarArchivo();
-      break;
-    case 0:
-      return;
-    default:
-      cout << "Opción inválida. Intente nuevamente." << endl;
-      break;
-    }
   }
 }

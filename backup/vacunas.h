@@ -2,13 +2,12 @@
 #define VACUNAS_H
 
 // Declarar los prototipos de las funciones relacionadas con las vacunas
-
-bool vacunaExiste(const char * vacunaID);
-
 void crearVacuna();
-const char* mostrarVacunas();
-
+void leerVacuna();
+void actualizarVacuna();
+void eliminarVacuna();
 void crearArchivoVacunas();
 void borrarArchivoVacunas();
+void vacunasMenu();
 
 #endif

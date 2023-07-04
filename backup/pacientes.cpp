@@ -1,15 +1,11 @@
 #include "pacientes.h"
-#include "vacunas.h"
-#include "historialVacunacion.h"
 #include <iostream>
 #include <fstream>
 #include <cstring>
 #include <conio.h>
-#include <string>
 
 using namespace std;
 
-string TMP_PATH = "temp.dat";
 string PACIENTES_PATH = "pacientes.dat";
 
 class Paciente
@@ -20,12 +16,12 @@ private:
   char apellidoPaterno[50];
   char apellidoMaterno[50];
   char fechaNacimiento[20];
-  char genero[20];
-  char correo[100];
+  char genero[10];
+  char correo[50];
   char distrito[50];
   char provincia[50];
   char departamento[50];
-  char telefono[20];
+  char telefono[15];
 
 public:
   Paciente(const char *_ID = "", const char *_nombre = "", const char *_apellidoPaterno = "", const char *_apellidoMaterno = "", const char *_fechaNacimiento = "", const char *_genero = "", const char *_correo = "", const char *_distrito = "", const char *_provincia = "", const char *_departamento = "", const char *_telefono = "")
@@ -35,12 +31,12 @@ public:
     strncpy(apellidoPaterno, _apellidoPaterno, 50);
     strncpy(apellidoMaterno, _apellidoMaterno, 50);
     strncpy(fechaNacimiento, _fechaNacimiento, 20);
-    strncpy(genero, _genero, 20);
-    strncpy(correo, _correo, 100);
+    strncpy(genero, _genero, 10);
+    strncpy(correo, _correo, 50);
     strncpy(distrito, _distrito, 50);
     strncpy(provincia, _provincia, 50);
     strncpy(departamento, _departamento, 50);
-    strncpy(telefono, _telefono, 20);
+    strncpy(telefono, _telefono, 15);
   }
 
   friend ostream &operator<<(ostream &os, const Paciente &pac)
@@ -50,12 +46,12 @@ public:
     os.write(pac.apellidoPaterno, 50);
     os.write(pac.apellidoMaterno, 50);
     os.write(pac.fechaNacimiento, 20);
-    os.write(pac.genero, 20);
-    os.write(pac.correo, 100);
+    os.write(pac.genero, 10);
+    os.write(pac.correo, 50);
     os.write(pac.distrito, 50);
     os.write(pac.provincia, 50);
     os.write(pac.departamento, 50);
-    os.write(pac.telefono, 20);
+    os.write(pac.telefono, 15);
     return os;
   }
 
@@ -66,123 +62,13 @@ public:
     is.read(pac.apellidoPaterno, 50);
     is.read(pac.apellidoMaterno, 50);
     is.read(pac.fechaNacimiento, 20);
-    is.read(pac.genero, 20);
-    is.read(pac.correo, 100);
+    is.read(pac.genero, 10);
+    is.read(pac.correo, 50);
     is.read(pac.distrito, 50);
     is.read(pac.provincia, 50);
     is.read(pac.departamento, 50);
-    is.read(pac.telefono, 20);
+    is.read(pac.telefono, 15);
     return is;
-  }
-
-  void setID(const char *_ID)
-  {
-    strncpy(ID, _ID, 10);
-  }
-
-  const char *getID() const
-  {
-    return ID;
-  }
-
-  void setNombre(const char *_nombre)
-  {
-    strncpy(nombre, _nombre, 50);
-  }
-
-  const char *getNombre() const
-  {
-    return nombre;
-  }
-
-  void setApellidoPaterno(const char *_apellidoPaterno)
-  {
-    strncpy(apellidoPaterno, _apellidoPaterno, 50);
-  }
-
-  const char *getApellidoPaterno() const
-  {
-    return apellidoPaterno;
-  }
-
-  void setApellidoMaterno(const char *_apellidoMaterno)
-  {
-    strncpy(apellidoMaterno, _apellidoMaterno, 50);
-  }
-
-  const char *getApellidoMaterno() const
-  {
-    return apellidoMaterno;
-  }
-
-  void setFechaNacimiento(const char *_fechaNacimiento)
-  {
-    strncpy(fechaNacimiento, _fechaNacimiento, 20);
-  }
-
-  const char *getFechaNacimiento() const
-  {
-    return fechaNacimiento;
-  }
-
-  void setGenero(const char *_genero)
-  {
-    strncpy(genero, _genero, 20);
-  }
-
-  const char *getGenero() const
-  {
-    return genero;
-  }
-
-  void setCorreo(const char *_correo)
-  {
-    strncpy(correo, _correo, 100);
-  }
-
-  const char *getCorreo() const
-  {
-    return correo;
-  }
-
-  void setDistrito(const char *_distrito)
-  {
-    strncpy(distrito, _distrito, 50);
-  }
-
-  const char *getDistrito() const
-  {
-    return distrito;
-  }
-
-  void setProvincia(const char *_provincia)
-  {
-    strncpy(provincia, _provincia, 50);
-  }
-
-  const char *getProvincia() const
-  {
-    return provincia;
-  }
-
-  void setDepartamento(const char *_departamento)
-  {
-    strncpy(departamento, _departamento, 50);
-  }
-
-  const char *getDepartamento() const
-  {
-    return departamento;
-  }
-
-  void setTelefono(const char *_telefono)
-  {
-    strncpy(telefono, _telefono, 20);
-  }
-
-  const char *getTelefono() const
-  {
-    return telefono;
   }
 
   void imprimir() const
@@ -199,59 +85,38 @@ public:
     cout << "Departamento: " << departamento << endl;
     cout << "Teléfono: " << telefono << endl;
   }
+
+  const char *getID() const
+  {
+    return ID;
+  }
+
+  const char *getNombre() const
+  {
+    return nombre;
+  }
 };
 
-bool pacienteExiste(const char *pacienteID)
-{
-  ifstream archivoLectura(PACIENTES_PATH.c_str(), ios::binary);
-  if (!archivoLectura)
-  {
-    crearArchivoPacientes();
-  }
-
-  Paciente pac;
-  while (archivoLectura >> pac)
-  {
-    if (strcmp(pac.getID(), pacienteID) == 0)
-    {
-      archivoLectura.close();
-      return true;
-    }
-  }
-
-  archivoLectura.close();
-  return false;
-}
-
-const char *crearPaciente()
+void crearPaciente()
 {
   system("cls");
 
-  char *ID = new char[10];
-  ;
-  cin.ignore();
-  cout << "Ingrese el ID del Paciente: ";
-  cin.getline(ID, 10);
-
-  if (pacienteExiste(ID))
-  {
-    cout << "El paciente con el ID " << ID << " ya existe." << endl;
-    getch();
-    delete[] ID;
-    return nullptr;
-  }
-
+  char ID[10];
   char nombre[50];
   char apellidoPaterno[50];
   char apellidoMaterno[50];
   char fechaNacimiento[20];
-  char genero[20];
-  char correo[100];
+  char genero[10];
+  char correo[50];
   char distrito[50];
   char provincia[50];
   char departamento[50];
-  char telefono[20];
+  char telefono[15];
 
+  cout << "Ingrese el ID del Paciente: ";
+  cin >> ID;
+
+  cin.ignore();
   cout << "Ingrese el nombre: ";
   cin.getline(nombre, 50);
 
@@ -265,10 +130,10 @@ const char *crearPaciente()
   cin.getline(fechaNacimiento, 20);
 
   cout << "Ingrese el género: ";
-  cin.getline(genero, 20);
+  cin.getline(genero, 10);
 
   cout << "Ingrese el correo: ";
-  cin.getline(correo, 100);
+  cin.getline(correo, 50);
 
   cout << "Ingrese el distrito: ";
   cin.getline(distrito, 50);
@@ -280,7 +145,7 @@ const char *crearPaciente()
   cin.getline(departamento, 50);
 
   cout << "Ingrese el teléfono: ";
-  cin.getline(telefono, 20);
+  cin.getline(telefono, 15);
 
   Paciente pac(ID, nombre, apellidoPaterno, apellidoMaterno, fechaNacimiento, genero, correo, distrito, provincia, departamento, telefono);
 
@@ -289,96 +154,50 @@ const char *crearPaciente()
   archivo.close();
 
   cout << "Paciente creado exitosamente." << endl;
-
-  return pac.getID();
 }
 
-const char *buscarPaciente()
-{
-  system("cls");
-
-  char *ID = new char[10];
-  ;
-  cin.ignore();
-  cout << "Ingrese el ID del Paciente: ";
-  cin.getline(ID, 10);
-
-  if (!pacienteExiste(ID))
-  {
-    cout << "No se encontró un paciente con el ID especificado." << endl;
-    getch();
-    delete[] ID;
-    return nullptr;
-  }
-  else
-  {
-    return ID;
-  }
-}
-
-void leerPaciente(const char *pacienteID)
+void leerPaciente()
 {
   system("cls");
 
   ifstream archivo(PACIENTES_PATH.c_str(), ios::binary);
   if (!archivo)
   {
-    cout << "No se pudo abrir el archivo de pacientes." << endl;
+    cout << "No se pudo abrir el archivo." << endl;
     return;
   }
 
   Paciente pac;
-  bool encontrado = false;
-
   while (archivo >> pac)
   {
-    if (strcmp(pac.getID(), pacienteID) == 0)
-    {
-      encontrado = true;
-      pac.imprimir();
-      cout << endl;
-      getch();
-    }
+    pac.imprimir();
+    cout << endl;
   }
 
   archivo.close();
-
-  if (!encontrado)
-  {
-    cout << "No se encontró un paciente con el ID especificado." << endl;
-    getch();
-  }
+  getch();
 }
 
-void registrarVacunacion(const char *pacienteID)
-{
-  const char* tempID = nullptr;
-  char vacunaID[10];
-
-  tempID = mostrarVacunas();
-  if (tempID != nullptr)
-  {
-    strcpy(vacunaID, tempID);
-    delete[] tempID;
-    crearHistorialVacunacion(pacienteID, vacunaID);
-  }
-  return;
-}
-
-void leerHistorialPaciente(const char *pacienteID)
-{
-  leerHistorialVacunacionPaciente(pacienteID);
-  return;
-}
-
-void actualizarPaciente(const char *pacienteID)
+void actualizarPaciente()
 {
   system("cls");
+
+  char ID[10];
+  char nombre[50];
+  char apellidoPaterno[50];
+  char apellidoMaterno[50];
+  char fechaNacimiento[20];
+  char genero[10];
+  char correo[50];
+  char distrito[50];
+  char provincia[50];
+  char departamento[50];
+  char telefono[15];
 
   ifstream archivoLectura(PACIENTES_PATH.c_str(), ios::binary);
   if (!archivoLectura)
   {
-    cout << "No se pudo abrir el archivo de pacientes." << endl;
+    cout << "No se pudo abrir el archivo." << endl;
     return;
   }
 
@@ -386,16 +205,18 @@ void actualizarPaciente(const char *pacienteID)
   if (!archivoEscritura)
   {
     cout << "No se pudo abrir el archivo." << endl;
-    archivoLectura.close();
     return;
   }
+
+  cout << "Ingrese el ID del paciente a actualizar: ";
+  cin >> ID;
 
   Paciente pac;
   bool encontrado = false;
 
   while (archivoLectura >> pac)
   {
-    if (strcmp(pac.getID(), pacienteID) == 0)
+    if (strcmp(pac.getID(), ID) == 0)
     {
       encontrado = true;
       pac.imprimir();
@@ -403,17 +224,6 @@ void actualizarPaciente(const char *pacienteID)
       cin.ignore();
 
       cout << endl;
-
-      char nombre[50];
-      char apellidoPaterno[50];
-      char apellidoMaterno[50];
-      char fechaNacimiento[20];
-      char genero[10];
-      char correo[50];
-      char distrito[50];
-      char provincia[50];
-      char departamento[50];
-      char telefono[15];
 
       cout << "Ingrese el nuevo nombre: ";
       cin.getline(nombre, 50);
@@ -445,7 +255,7 @@ void actualizarPaciente(const char *pacienteID)
       cout << "Ingrese el nuevo teléfono: ";
       cin.getline(telefono, 15);
 
-      pac = Paciente(pacienteID, nombre, apellidoPaterno, apellidoMaterno, fechaNacimiento, genero, correo, distrito, provincia, departamento, telefono);
+      pac = Paciente(ID, nombre, apellidoPaterno, apellidoMaterno, fechaNacimiento, genero, correo, distrito, provincia, departamento, telefono);
       cout << "Paciente actualizado." << endl;
     }
     archivoEscritura << pac;
@@ -465,14 +275,19 @@ void actualizarPaciente(const char *pacienteID)
   rename("temp.dat", PACIENTES_PATH.c_str());
 }
 
-void eliminarPaciente(const char *pacienteID)
+void eliminarPaciente()
 {
   system("cls");
+
+  char ID[10];
+
+  cout << "Ingrese el ID del paciente a eliminar: ";
+  cin >> ID;
 
   ifstream archivoLectura(PACIENTES_PATH.c_str(), ios::binary);
   if (!archivoLectura)
   {
-    cout << "No se pudo abrir el archivo de pacientes." << endl;
+    cout << "No se pudo abrir el archivo." << endl;
     return;
   }
 
@@ -480,7 +295,6 @@ void eliminarPaciente(const char *pacienteID)
   if (!archivoEscritura)
   {
     cout << "No se pudo abrir el archivo." << endl;
-    archivoLectura.close();
     return;
   }
 
@@ -489,7 +303,7 @@ void eliminarPaciente(const char *pacienteID)
 
   while (archivoLectura >> pac)
   {
-    if (strcmp(pac.getID(), pacienteID) == 0)
+    if (strcmp(pac.getID(), ID) == 0)
     {
       encontrado = true;
       pac.imprimir();
@@ -515,28 +329,6 @@ void eliminarPaciente(const char *pacienteID)
   rename("temp.dat", PACIENTES_PATH.c_str());
 }
 
-void leerPacientes()
-{
-  system("cls");
-
-  ifstream archivo(PACIENTES_PATH.c_str(), ios::binary);
-  if (!archivo)
-  {
-    cout << "No se pudo abrir el archivo." << endl;
-    return;
-  }
-
-  Paciente pac;
-  while (archivo >> pac)
-  {
-    pac.imprimir();
-    cout << endl;
-  }
-
-  archivo.close();
-  getch();
-}
-
 void crearArchivoPacientes()
 {
   ofstream archivo(PACIENTES_PATH.c_str(), ios::binary);
@@ -560,5 +352,58 @@ void borrarArchivoPacientes()
   else
   {
     cout << "No se pudo eliminar el archivo pacientes.dat." << endl;
+  }
+}
+
+void pacientesMenu()
+{
+  int opcion;
+
+  while (true)
+  {
+    system("cls");
+
+    cout << "MENU PACIENTE" << endl;
+    cout << "1. Crear paciente" << endl;
+    cout << "2. Leer pacientes" << endl;
+    cout << "3. Actualizar paciente" << endl;
+    cout << "4. Eliminar paciente" << endl;
+    cout << "0. Volver" << endl;
+
+    cout << endl;
+    cout << "DEV MENU" << endl;
+    cout << "11. Crear Archivo pacientes.dat" << endl;
+    cout << "12. Borrar Archivo pacientes.dat" << endl;
+
+    cout << endl;
+    cout << "Seleccione una opcion: ";
+    cin >> opcion;
+
+    switch (opcion)
+    {
+    case 1:
+      crearPaciente();
+      break;
+    case 2:
+      leerPaciente();
+      break;
+    case 3:
+      actualizarPaciente();
+      break;
+    case 4:
+      eliminarPaciente();
+      break;
+    case 11:
+      crearArchivoPacientes();
+      break;
+    case 12:
+      borrarArchivoPacientes();
+      break;
+    case 0:
+      return;
+    default:
+      cout << "Opción inválida. Intente nuevamente." << endl;
+      break;
+    }
   }
 }
